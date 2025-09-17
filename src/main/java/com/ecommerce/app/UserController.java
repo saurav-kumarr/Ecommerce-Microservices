@@ -1,28 +1,37 @@
 package com.ecommerce.app;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
-    private List<User> userList = new ArrayList<>();
+    private final UserService userService;
+
 
     @GetMapping("/api/users")
     public List<User> getAllUsers(){
 
-
+        List<User> userList = userService.fetchAllUsers();
         return userList;
     }
 
+    @GetMapping("/api/users/{id}")
+    public User getUser(@PathVariable Long id){
+
+        User user = userService.fetchUser(id);
+        return user;
+    }
+
     @PostMapping("/api/users")
-    public List<User> createUser(@RequestBody User user){
+    public String createUser(@RequestBody User user){
 
-        userList.add(user);
+         userService.addUser(user);
 
-        return userList;
+        return "User added Successfully";
     }
 
 }
