@@ -49,6 +49,17 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public boolean deleteProduct(Long id) {
+
+        return productRepository.findById(id)
+                        .map(product -> {
+                            product.setActive(false);
+                            productRepository.save(product);
+                            return true;
+                        }).orElse(false);
+
+    }
+
 
     private void updateProductFromRequest(Product product, ProductRequest productRequest) {
 
@@ -74,6 +85,7 @@ public class ProductService {
         productResponse.setImageUrl(savedProduct.getImageUrl());
         return productResponse;
     }
+
 
 
 }
