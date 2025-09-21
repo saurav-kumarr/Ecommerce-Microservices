@@ -19,7 +19,7 @@ public class ProductController {
     @PostMapping
      public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest){
 
-         return new ResponseEntity<ProductResponse>(productService.createProduct(productRequest),
+         return new ResponseEntity<>(productService.createProduct(productRequest),
                  HttpStatus.CREATED);
 
      }
@@ -29,8 +29,9 @@ public class ProductController {
             @PathVariable Long id,
             @RequestBody ProductRequest productRequest){
 
-        return new ResponseEntity<ProductResponse>(productService.updateProduct(id, productRequest),
-                HttpStatus.OK);
+        return productService.updateProduct(id, productRequest)
+                .map(ResponseEntity :: ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
 
