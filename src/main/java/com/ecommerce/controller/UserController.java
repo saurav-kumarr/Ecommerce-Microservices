@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
-import com.ecommerce.model.User;
+import com.ecommerce.dto.UserRequest;
+import com.ecommerce.dto.UserResponse;
 import com.ecommerce.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,17 +19,14 @@ public class UserController {
 
     //Another way request
     @RequestMapping( method = RequestMethod.GET)
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserResponse>> getAllUsers(){
 
-        List<User> userList = userService.fetchAllUsers();
-
-
-
+        List<UserResponse> userList = userService.fetchAllUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id){
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long id){
 
 
         return  userService.fetchUser(id)
@@ -37,17 +35,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody User user){
+    public ResponseEntity<String> createUser(@RequestBody UserRequest userRequest){
 
-         userService.addUser(user);
+         userService.addUser(userRequest);
 
         return new ResponseEntity<>("User added Successfully", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@RequestBody User user, @PathVariable Long id){
+    public ResponseEntity<String> updateUser(@RequestBody UserRequest userRequest, @PathVariable Long id){
 
-        boolean updated = userService.updateUser(user,id);
+        boolean updated = userService.updateUser(userRequest,id);
         if(updated){
             return new ResponseEntity<>("Updated Successfully!", HttpStatus.OK);
         } else {
