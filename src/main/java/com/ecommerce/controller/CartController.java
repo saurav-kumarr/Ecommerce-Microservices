@@ -1,6 +1,8 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.dto.CartItemRequest;
+import com.ecommerce.model.CartItem;
+import com.ecommerce.repository.CartItemRepository;
 import com.ecommerce.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,12 +10,15 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
 public class CartController {
 
     private final CartService cartService;
+    private final CartItemRepository cartItemRepository;
 
     @PostMapping
     public ResponseEntity<String> addToCart(
@@ -36,6 +41,12 @@ public class CartController {
 
        return deleted ? ResponseEntity.noContent().build()
                : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CartItem>> getCart(
+            @RequestHeader("X-User-ID") String userId){
+        return ResponseEntity.ok(cartService.getCart(userId));
     }
 
 }
